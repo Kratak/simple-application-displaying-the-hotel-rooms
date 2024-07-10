@@ -1,46 +1,34 @@
-# Getting Started with Create React App
+## Create a simple application displaying the hotel rooms.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+   ### Rules:
 
-## Available Scripts
+1. Create a public git repository e.g. on GitHub with brief info on how to run the application.
+2. Use TypeScript and React.
+3. You can use any framework, package or UI library of your choice if you want to.
+4. Build it like a production-ready micro project, your selected technologies and
+   architecture will matter.
 
-In the project directory, you can run:
+### Application requirements:
 
-### `npm start`
+1. App should fetch and display a list of hotel rooms from
+   `process.env.REACT_APP_ROOMS_API` (GET)
+2. Rooms should be sorted by price; User should be able to change the sorting. (by name,
+   by price)
+3. Rooms list should be paginated, display up to 4 elements on each page
+4. App should have a possibility to check rooms avaiability (all at once, on demand or both
+   methods). endpoint for the availability check:
+   `${process.env.REACT_APP_ROOM_API}/${id}` (GET),
+   e.g. `${process.env.REACT_APP_ROOM_API}/1`
+5. Display the availability status for each room. That could be either "available",
+   "onRequest", "soldout" or "error".
+6. Display the price, currency and the difference after availability check (original vs. checked
+   one).
+7. Each room should have a “Book” button. It should be disabled when the selected room
+   isn't available. On the click event log the selected room info to the browser console.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Run guid
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Run in project root dir `npm install` for required dependencies
+2. For .env credentials, ask project owner, temple are in `.env.template`
+3. Run `npm run start` for start app locally.
