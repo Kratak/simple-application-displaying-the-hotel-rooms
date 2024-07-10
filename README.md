@@ -27,7 +27,7 @@
    isn't available. On the click event log the selected room info to the browser console.
 
 
-## Run guid
+## Run guide
 
 1. Run in project root dir `npm install` for required dependencies
 2. For .env credentials, ask project owner, temple are in `.env.template`
