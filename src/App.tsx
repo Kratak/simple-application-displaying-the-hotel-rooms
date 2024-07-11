@@ -1,29 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import useApi from "./useApi";
 
 function App() {
   const { displayedRooms } = useApi();
 
-  console.log(displayedRooms)
-
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          Available  rooms:
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
       </header>
+        <div>
+          {displayedRooms.map(room => {
+            return(
+                <div key={room.id}>
+                  <div>{room.name}</div>
+                  <div>Price: {new Intl.NumberFormat('pl', { style: 'currency', currency: room.price.currencyCode  }).format(
+                      room.price.value / 100,
+                  )}
+                  </div>
+                    <div>
+                        <button>check availability</button> Status:
+                    </div>
+                    <br/>
+                </div>
+            )
+          })}
+        </div>
     </div>
   );
 }
