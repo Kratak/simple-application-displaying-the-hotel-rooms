@@ -22,7 +22,7 @@ function App() {
                   )}
                   </div>
                     <div>
-                        <button>check availability</button> Status:
+                        <button>check availability</button> Status: {room.availability}
                     </div>
                     <br/>
                 </div>

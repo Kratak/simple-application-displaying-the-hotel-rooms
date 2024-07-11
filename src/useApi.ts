@@ -10,6 +10,7 @@ interface RoomProps {
         currencyCode: string;
         value: number;
     }
+    availability: "unknown" | "available" | "not_available";
 }
 
 const displayRoomInitialPage = 1
@@ -27,7 +28,9 @@ const useApi = () => {
                 return res.json()
             })
             .then((roomsData: Array<RoomProps>) => {
-                const sortedRooms = roomsData.sort((room, prevRoom) => {
+                const sortedRooms = roomsData
+                    .map((room): RoomProps => ({...room, availability: 'unknown'}))
+                    .sort((room, prevRoom) => {
                     if (roomsSort === "ASC") {
                         return room.price.value - prevRoom.price.value
                     }
@@ -42,6 +45,10 @@ const useApi = () => {
                 setDisplayedRooms(sortedRooms.slice((displayedRoomsPage * maxDisplayedRooms) - maxDisplayedRooms, displayedRoomsPage * maxDisplayedRooms))
             })
             .catch(e => console.log(e))
+    }
+
+    const getRoomAvaibility = async (id: number) => {
+
     }
 
     const handleRoomSortToggle = () => {
