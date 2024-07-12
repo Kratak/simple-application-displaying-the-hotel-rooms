@@ -23,6 +23,9 @@ const useApi = () => {
     const [displayedRooms, setDisplayedRooms  ] = useState<Array<RoomProps>>([]);
     const [displayedRoomsPage, setDisplayedRoomsPage] = useState(displayRoomInitialPage)
 
+    const isPrevPageButtonDisable = displayedRoomsPage === 1
+    const isNextPageButtonDisable = rooms.length < maxDisplayedRooms || displayedRoomsPage >= rooms.length / maxDisplayedRooms
+
     const  getRooms = async () => {
         await fetch(`${roomsApiKey}`)
             .then((res) => {
@@ -31,19 +34,7 @@ const useApi = () => {
             .then((roomsData: Array<RoomProps>) => {
                 const sortedRooms = roomsData
                     .map((room): RoomProps => ({...room, availabilityStatus: 'unknown'}))
-                    .sort((room, prevRoom) => {
-                    if (roomsSort === "ASC") {
-                        return room.price.value - prevRoom.price.value
-                    }
-
-                    if (roomsSort === "DESC") {
-                        return prevRoom.price.value - room.price.value
-                    }
-
-                    return 1
-                })
-                setRooms(sortedRooms)
-                setDisplayedRooms(sortedRooms.slice((displayedRoomsPage * maxDisplayedRooms) - maxDisplayedRooms, displayedRoomsPage * maxDisplayedRooms))
+                handleSortAndSetRooms(sortedRooms)
             })
             .catch(e => console.log(e))
     }
@@ -53,16 +44,16 @@ const useApi = () => {
             .then((res) => {
                 return res.json()
             })
-            .then((roomData: RoomProps) => {
+            .then(({availabilityStatus, price}: RoomProps) => {
                 setRooms(rooms.map(room => {
                     if (room.id === id){
-                        return {...room, ...roomData }
+                        return {...room, availabilityStatus, price: price !== null ? price : room.price }
                     }
                     return room
                 }))
                 setDisplayedRooms(displayedRooms.map(room => {
                     if (room.id === id){
-                        return {...room, ...roomData }
+                        return {...room, availabilityStatus, price: price !== null ? price : room.price }
                     }
                     return room
                 }))
@@ -70,13 +61,37 @@ const useApi = () => {
             .catch(e => console.log(e))
     }
 
-    const handleRoomSortToggle = () => {
+    const handleRoomSortToggle = () => () => {
         if (roomsSort === "DESC") {
             setRoomsSort("ASC")
         } else {
             setRoomsSort("DESC")
         }
+    }
 
+    const handleChangePage = (action: 'next' | 'prev') => ()=> {
+        if (action === 'next') {
+            setDisplayedRoomsPage(displayedRoomsPage + 1)
+        } else {
+            setDisplayedRoomsPage(displayedRoomsPage - 1)
+        }
+    }
+
+    const handleSortAndSetRooms = (roomsData: Array<RoomProps>) => {
+        const sortedRooms = roomsData
+            .sort((room, prevRoom) => {
+                if (roomsSort === "ASC") {
+                    return room.price.value - prevRoom.price.value
+                }
+
+                if (roomsSort === "DESC") {
+                    return prevRoom.price.value - room.price.value
+                }
+
+                return 1
+            })
+        setRooms(sortedRooms)
+        setDisplayedRooms(sortedRooms.slice((displayedRoomsPage * maxDisplayedRooms) - maxDisplayedRooms, displayedRoomsPage * maxDisplayedRooms))
     }
 
 
@@ -84,10 +99,19 @@ const useApi = () => {
         getRooms();
     }, []);
 
+    useEffect(() => {
+        handleSortAndSetRooms(rooms);
+    }, [roomsSort, displayedRoomsPage]);
+
     return {
         displayedRooms,
+        getRoomAvailability,
+        displayedRoomsPage,
+        handleChangePage,
         handleRoomSortToggle,
-        getRoomAvailability
+        roomsSort,
+        isPrevPageButtonDisable,
+        isNextPageButtonDisable
     }
 }
 

@@ -3,7 +3,16 @@ import './App.css';
 import useApi from "./useApi";
 
 function App() {
-  const { displayedRooms, getRoomAvailability } = useApi();
+  const {
+    displayedRooms,
+    getRoomAvailability,
+    displayedRoomsPage,
+    handleChangePage,
+    handleRoomSortToggle,
+      roomsSort,
+    isNextPageButtonDisable,
+      isPrevPageButtonDisable
+  } = useApi();
 
   return (
     <div className="App">
@@ -12,6 +21,11 @@ function App() {
           Available  rooms:
         </p>
       </header>
+        <br/>
+        <div>
+            <button onClick={handleRoomSortToggle()}>{`Sorted by ${roomsSort === 'DESC' ? "highest ↑": "lowest ↓"} price`}</button>
+        </div>
+        <br/>
         <div>
           {displayedRooms.map(room => {
             return(
@@ -32,6 +46,11 @@ function App() {
             )
           })}
         </div>
+      <div>
+        <button disabled={isPrevPageButtonDisable} onClick={handleChangePage('prev')}>Previous page</button>
+          {displayedRoomsPage}
+        <button disabled={isNextPageButtonDisable} onClick={handleChangePage('next')}>Next page</button>
+      </div>
     </div>
   );
 }
