@@ -3,7 +3,7 @@ import './App.css';
 import useApi from "./useApi";
 
 function App() {
-  const { displayedRooms } = useApi();
+  const { displayedRooms, getRoomAvailability } = useApi();
 
   return (
     <div className="App">
@@ -22,7 +22,7 @@ function App() {
                   )}
                   </div>
                     <div>
-                        <button>check availability</button> Status: {room.availability}
+                        <button onClick={() => getRoomAvailability(room.id)}>check availability</button> Status: {room.availabilityStatus}
                     </div>
                     <br/>
                 </div>

@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 const roomApiKey = process.env.REACT_APP_ROOM_API
 const roomsApiKey = process.env.REACT_APP_ROOMS_API
 
+type RoomAvailabilityStatus = "unknown" | "available" | "onRequest" | "soldout" | "error";
 interface RoomProps {
     id: number;
     name: string;
@@ -10,7 +11,7 @@ interface RoomProps {
         currencyCode: string;
         value: number;
     }
-    availability: "unknown" | "available" | "not_available";
+    availabilityStatus: RoomAvailabilityStatus;
 }
 
 const displayRoomInitialPage = 1
@@ -29,7 +30,7 @@ const useApi = () => {
             })
             .then((roomsData: Array<RoomProps>) => {
                 const sortedRooms = roomsData
-                    .map((room): RoomProps => ({...room, availability: 'unknown'}))
+                    .map((room): RoomProps => ({...room, availabilityStatus: 'unknown'}))
                     .sort((room, prevRoom) => {
                     if (roomsSort === "ASC") {
                         return room.price.value - prevRoom.price.value
@@ -47,8 +48,27 @@ const useApi = () => {
             .catch(e => console.log(e))
     }
 
-    const getRoomAvaibility = async (id: number) => {
-
+    const getRoomAvailability = async (id: number) => {
+        await fetch(`${roomApiKey}/${id}`)
+            .then((res) => {
+                return res.json()
+            })
+            .then((roomData: RoomProps) => {
+                console.log(rooms.findIndex(item => item.id === id))
+                setRooms(rooms.map(room => {
+                    if (room.id === id){
+                        return {...room, ...roomData }
+                    }
+                    return room
+                }))
+                setDisplayedRooms(displayedRooms.map(room => {
+                    if (room.id === id){
+                        return {...room, ...roomData }
+                    }
+                    return room
+                }))
+            })
+            .catch(e => console.log(e))
     }
 
     const handleRoomSortToggle = () => {
@@ -67,7 +87,8 @@ const useApi = () => {
 
     return {
         displayedRooms,
-        handleRoomSortToggle
+        handleRoomSortToggle,
+        getRoomAvailability
     }
 }
 
