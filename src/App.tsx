@@ -24,6 +24,9 @@ function App() {
                     <div>
                         <button onClick={() => getRoomAvailability(room.id)}>check availability</button> Status: {room.availabilityStatus}
                     </div>
+                  <div>
+                    <button disabled={room.availabilityStatus !== 'available'} onClick={() => console.log('room booked')}>book</button>
+                  </div>
                     <br/>
                 </div>
             )

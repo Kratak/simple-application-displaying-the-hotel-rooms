@@ -54,7 +54,6 @@ const useApi = () => {
                 return res.json()
             })
             .then((roomData: RoomProps) => {
-                console.log(rooms.findIndex(item => item.id === id))
                 setRooms(rooms.map(room => {
                     if (room.id === id){
                         return {...room, ...roomData }
